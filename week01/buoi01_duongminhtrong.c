@@ -7,7 +7,7 @@
 
 void parse_config(const uint8_t *config_packet, int16_t *high_threshold) {
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-     if (config_packet==NULL) return;
+     if (config_packet==NULL||high_threshold==NULL) return;
      *high_threshold=(int16_t)((config_packet[1]<<8)|config_packet[0]); 
 
 
