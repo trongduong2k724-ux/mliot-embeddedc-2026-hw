@@ -9,7 +9,10 @@ typedef union {
     uint16_t raw_value;
     struct {
         // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
+        uint16_t PWR_ON       : 1;  // Bit [0]: Trạng thái nguồn xe (1 bit)
+        uint16_t ASSIST_LEVEL : 2;  // Bit [2:1]: Chế độ trợ lực điện (2 bits)
+        uint16_t LIGHT_BRIGHT : 4;  // Bit [6:3]: Độ sáng hệ thống đèn (4 bits)
+        uint16_t RESERVED     : 9;  // Bit [15:7]: Vùng trống bảo mật (9 bits)
 
 
 
@@ -79,7 +82,7 @@ int main() {
     // 1. Test Task 1
     my_bike.raw_value = 0x0025; 
     printf("REGISTER STRUCTURE: \n");
-    printf("PWR_ON: %d | ASSIST_LEVEL: %d | LIGHT_BRIGHT: %d\n\n", 
+     printf("PWR_ON: %d | ASSIST_LEVEL: %d | LIGHT_BRIGHT: %d\n\n", 
            my_bike.fields.PWR_ON, my_bike.fields.ASSIST_LEVEL, my_bike.fields.LIGHT_BRIGHT);
 
     // 2. Test Task 2
