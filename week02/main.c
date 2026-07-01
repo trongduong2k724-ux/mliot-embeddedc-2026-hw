@@ -34,7 +34,11 @@ void drive_sport(void) {
 }
 
 // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
+void(*drive_modes[3])(void)={
+    drive_eco,
+    drive_normal,
+    drive_sport
+};
 
 
 
@@ -45,13 +49,14 @@ void drive_sport(void) {
 
 void Battery_Monitor(void (*overheat_cb)(void)) {
     int battery_temp = 45; 
+    if (battery_temp > 40)}{
+        if (overheat_cb != NULL) {
+            overheat_cb();
+        }
+
+    }
     
-    // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
-
-
-
-    // HỌC VIÊN KẾT THÚC VIẾT CODE
+    
 }
 
 void Critical_Battery_Handler(void) {
@@ -66,7 +71,9 @@ uint32_t total_odometer = 0;
 
 void crash_simulation(void) {
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
+    volatile uint8_t stack_burner[1024];
+    stack_burner[1024] = 0;
+    crash_simulation();
 
 
 
@@ -88,8 +95,12 @@ int main() {
     // 2. Test Task 2
     printf("ENGINE CONTROLLING: \n");
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
-
+     uint8_t total_modes = sizeof(drive_modes)/sizeof(drive_modes[0]);
+     if (my_bike.fields.ASSIST_LEVEL < total_modes) {
+        if (drive_modes[my_bike.fields.ASSIST_LEVEL] != NULL) {
+            drive_modes[my_bike.fields.ASSIST_LEVEL]();
+        }
+     })
 
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
