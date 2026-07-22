@@ -1,0 +1,23 @@
+Task 1:
+Câu 1.1:
+Khi xuất mức logic 1 (3.3V): Transistor PMOS đóng (dẫn điện) và NMOS ngắt. Dòng điện sẽ được "đẩy" (Push) từ nguồn VDD (3.3V) đi qua PMOS 
+ra chân GPIO.
+
+Khi xuất mức logic 0 (0V): Transistor PMOS ngắt và NMOS đóng (dẫn điện). Dòng điện sẽ được "kéo" (Pull) từ chân GPIO đi qua NMOS xuống GND
+(0V).
+Câu 1.2:
+Ta cấu hình một chân GPIO ở chế độ Input Pull-up khi kết nối với các thiết bị ngoại vi có tính chất hở mạch khi không hoạt động. Điện trở 
+Pull-up nội sẽ kéo điện áp của chân lên mức logic 1 ổn định khi nút nhấn chưa được bấm, tránh trạng thái lơ lửng.
+
+Hiện tượng khi để Floating (No Pull-up/Pull-down): Nếu cấu hình chân là Input thả nổi và không nối vào đâu, chân GPIO sẽ hoạt động như 
+một ăng-ten thu sóng. Nó sẽ dễ dàng bắt các nhiễu điện từ xung quanh môi trường. Kết quả là giá trị đọc được trên thanh ghi dữ liệu đầu 
+vào (Input Data Register - IDR) sẽ bị nhiễu, nhảy loạn xạ ngẫu nhiên giữa 0 và 1.
+Task 2:
+Mục đích chính là để tối ưu hóa năng lượng (tiết kiệm pin). Trong vi điều khiển có rất nhiều bộ ngoại vi (GPIO, Timer, ADC, UART/SPI/I2C...)
+,nhưng hiếm khi một ứng dụng dùng hết tất cả cùng lúc. Việc cấp xung nhịp liên tục cho các module không dùng đến sẽ gây tiêu hao một 
+lượng điện năng vô ích rất lớn (tổn hao do chuyển mạch động). Do đó, ST thiết kế để tắt hết đi, lập trình viên cần dùng cái nào thì tự 
+bật cái đó lên.
+Nếu không cấp nguồn xung nhịp cho ngoại vi thông qua bus (APB/AHB), ngoại vi đó sẽ ở trạng thái "ngủ đông" hoặc ngắt kết nối vật lý với 
+CPU.
+Hậu quả là mọi thao tác ghi/đọc vào các thanh ghi cấu hình của ngoại vi đó đều bị vi điều khiển phớt lờ hoàn toàn. Và khi thể viết lệnh 
+cấu hình chân ra Output, nhưng thực tế thanh ghi không lưu giá trị đó lại và phần cứng GPIO sẽ không hoạt động.

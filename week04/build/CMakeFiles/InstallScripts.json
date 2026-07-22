@@ -1,0 +1,8 @@
+{
+	"InstallScripts" : 
+	[
+		"C:/Users/Dell/Documents/Learning_Startup/build/cmake_install.cmake",
+		"C:/Users/Dell/Documents/Learning_Startup/build/cmake/stm32cubemx/cmake_install.cmake"
+	],
+	"Parallel" : false
+}
