@@ -9,7 +9,10 @@ typedef union {
     uint16_t raw_value;
     struct {
         // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
+        uint16_t PWR_ON       : 1;  // Bit [0]: Trạng thái nguồn xe (1 bit)
+        uint16_t ASSIST_LEVEL : 2;  // Bit [2:1]: Chế độ trợ lực điện (2 bits)
+        uint16_t LIGHT_BRIGHT : 4;  // Bit [6:3]: Độ sáng hệ thống đèn (4 bits)
+        uint16_t RESERVED     : 9;  // Bit [15:7]: Vùng trống bảo mật (9 bits)
 
 
 
@@ -31,7 +34,11 @@ void drive_sport(void) {
 }
 
 // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
+void(*drive_modes[3])(void)={
+    drive_eco,
+    drive_normal,
+    drive_sport
+};
 
 
 
@@ -40,30 +47,33 @@ void drive_sport(void) {
 
 // TASK 3: ARCHITECTURE CALLBACKS
 
+
+
 void Battery_Monitor(void (*overheat_cb)(void)) {
     int battery_temp = 45; 
-    
-    // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
+    if (battery_temp > 40){
+        if (overheat_cb != NULL) {
+            overheat_cb();
+        }
 
-
-
-
-    // HỌC VIÊN KẾT THÚC VIẾT CODE
+    }
 }
-
 void Critical_Battery_Handler(void) {
     printf("[WARNING] Battery is overheated!\n");
 }
 
 
-// TASK 4: MEMORY MAP & CRASH LAB
+
+// TASK 4: MEMORY MAP & CRASH LAB 
 
 const char BIKE_MODEL[] = "E-Bike X2026"; 
 uint32_t total_odometer = 0;             
 
 void crash_simulation(void) {
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
+    volatile uint8_t stack_burner[1024];
+    stack_burner[1024] = 0;
+    crash_simulation();
 
 
 
@@ -79,14 +89,18 @@ int main() {
     // 1. Test Task 1
     my_bike.raw_value = 0x0025; 
     printf("REGISTER STRUCTURE: \n");
-    printf("PWR_ON: %d | ASSIST_LEVEL: %d | LIGHT_BRIGHT: %d\n\n", 
+     printf("PWR_ON: %d | ASSIST_LEVEL: %d | LIGHT_BRIGHT: %d\n\n", 
            my_bike.fields.PWR_ON, my_bike.fields.ASSIST_LEVEL, my_bike.fields.LIGHT_BRIGHT);
 
     // 2. Test Task 2
     printf("ENGINE CONTROLLING: \n");
     // HỌC VIÊN BẮT ĐẦU VIẾT CODE TỪ ĐÂY
-
-
+     uint8_t total_modes = sizeof(drive_modes)/sizeof(drive_modes[0]);
+     if (my_bike.fields.ASSIST_LEVEL < total_modes) {
+        if (drive_modes[my_bike.fields.ASSIST_LEVEL] != NULL) {
+            drive_modes[my_bike.fields.ASSIST_LEVEL]();
+        }
+     }
 
 
     // HỌC VIÊN KẾT THÚC VIẾT CODE
